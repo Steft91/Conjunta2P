@@ -3,9 +3,10 @@
 
 Descripción: 
 Nuestra página funciona de la siguiente manera:
- Primero el usuario abre la página y ve una lista de libros disponibles.
- Ahora decide que libro quiere que le presten, por ejemplo "Cien Años de Soledad", en el promt le aparece "Ingresa el ID del libro", una vez ingresado, este pasa a la lista de "libros prestados" que se actualiza una vez se acepte la acción.
-Si decide devolverlo, elige su ID  y el libro vuelve a estar disponible, cada esto se realiza con oprimir los botones que salen en la pantalla de "Prestar Libro" y "Devolver Libro".
+El usuario abre la página y ve una lista de libros disponibles, organizada con base en los 15 libros iniciales precargados en el sistema.
+Cuando decide qué libro quiere que le presten, selecciona el botón correspondiente en la interfaz de "Prestar Libro", e ingresa el ID del libro en el prompt que aparece. Este libro se mueve de la lista de "libros disponibles" al array librosPrestados, actualizando automáticamente ambas listas en pantalla.
+Si el usuario decide devolver un libro, selecciona su ID en el prompt desde la sección "Libros Prestados". El libro se regresa a la lista de "libros disponibles". Estas acciones son realizadas con botones asociados a funciones específicas en el sistema.
+
 
 1. Estructura del sistema de préstamos: ¿Cómo organizar y manipular los libros prestados usando
 arrays y sus métodos (push, pop, shift, unshift, splice)?
@@ -15,6 +16,7 @@ El push agrega libros al array  librosPrestados.
 El splice se usa para eliminar libros de librosPrestados al devolverlos.
 El find permite la búsqueda de un libro específico en el array.
 
+Los procesos de préstamo y devolución actualizan dinámicamente las listas y utilizan arrays con métodos push, splice y find.
 //librosPrestados.push(libro);
 
 2. Filtrado y búsquedas dinámicas: ¿Cómo implementar filtros (filter) y búsqueda de libros por título,
