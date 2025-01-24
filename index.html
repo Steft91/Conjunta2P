@@ -16,18 +16,31 @@
   <button id="devolver">Devolver Libro</button>
 
   <script>
-    // Simulación del sistema de gestión de biblioteca
+    
+    // Biblioteca Digital
 
-    // 1. Estructura del sistema de préstamos
+    // 1. Estructura del sistema de prestamos
     const libros = [
       { id: 1, titulo: "Cien Años de Soledad", autor: "Gabriel García Márquez", genero: "Novela", disponible: true },
       { id: 2, titulo: "1984", autor: "George Orwell", genero: "Distopía", disponible: true },
       { id: 3, titulo: "El Principito", autor: "Antoine de Saint-Exupéry", genero: "Ficción", disponible: true },
+      { id: 4, titulo: "El señor de los anillos", autor: "J. R. R. Tolkien", genero: "Ficción", disponible: true },
+      { id: 5, titulo: "Un mundo feliz", autor: "Aldoux Huxley", genero: "Drama", disponible: true },
+      { id: 6, titulo: "Orgullo y prejuicio", autor: "Jane Austen", genero: "Romantica", disponible: true },
+      { id: 7, titulo: "Crimen y castigo", autor: "Fiodor Dostojevski", genero: "Terror Psicologico", disponible: true },
+      { id: 8, titulo: "Lolita", autor: "Vladimir Nabokov", genero: "Novela", disponible: true },
+      { id: 9, titulo: "Ulises", autor: "James Joyce", genero: "Novela", disponible: true },
+      { id: 10, titulo: "Madame Bovary", autor: "Gustave Flaubert", genero: "Novela", disponible: true },
+      { id: 11, titulo: "Las mil y una noches", autor: "Anonimo", genero: "Novela", disponible: true },
+      { id: 12, titulo: "Don Quijote de la Mancha", autor: "Miguel de Cervantes", genero: "Novela", disponible: true },
+      { id: 13, titulo: "Almas muertas", autor: "Nikolai Gogol", genero: "Drama", disponible: true },
+      { id: 14, titulo: "Odisea", autor: "Homero", genero: "Clasico", disponible: true },
+      { id: 15, titulo: "Edipo Rey", autor: "Sophocles", genero: "Tragedia", disponible: true },
+
     ];
 
     const librosPrestados = [];
 
-    // Función para prestar un libro
     function prestarLibro(idLibro) {
       const libro = libros.find((libro) => libro.id === idLibro && libro.disponible);
       if (libro) {
@@ -39,7 +52,6 @@
       }
     }
 
-    // Función para devolver un libro
     function devolverLibro(idLibro) {
       const index = librosPrestados.findIndex((libro) => libro.id === idLibro);
       if (index !== -1) {
@@ -64,7 +76,7 @@
       listaLibros.innerHTML = "";
       libros.forEach((libro) => {
         const li = document.createElement("li");
-        li.textContent = `${libro.titulo} - ${libro.disponible ? "Disponible" : "Prestado"}`;
+        li.textContent = `${libro.id}. ${libro.titulo} - ${libro.disponible ? "Disponible" : "Prestado"}`;
         listaLibros.appendChild(li);
       });
 
@@ -88,6 +100,8 @@
     enviarRecordatorio();
 
     // 5. Eventos y usabilidad
+
+    //Evento onclick
     const botonPrestar = document.getElementById("prestar");
     const botonDevolver = document.getElementById("devolver");
 
@@ -98,6 +112,19 @@
     };
 
     botonDevolver.onclick = () => {
+      const id = parseInt(prompt("Introduce el ID del libro a devolver:"));
+      devolverLibro(id);
+      actualizarDOM();
+    };
+
+    //Evento OnChange
+    botonPrestar.onchange = () => {
+      const id = parseInt(prompt("Introduce el ID del libro a prestar:"));
+      prestarLibro(id);
+      actualizarDOM();
+    };
+
+    botonDevolver.onchange = () => {
       const id = parseInt(prompt("Introduce el ID del libro a devolver:"));
       devolverLibro(id);
       actualizarDOM();
