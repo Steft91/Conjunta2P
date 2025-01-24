@@ -16,133 +16,126 @@
   <button id="devolver">Devolver Libro</button>
 
   <script>
-    
-    // Biblioteca Digital
+    // Clase Libro
+    class Libro {
+      constructor(id, titulo, autor, genero, disponible = true) {
+        this.id = id;
+        this.titulo = titulo;
+        this.autor = autor;
+        this.genero = genero;
+        this.disponible = disponible;
+      }
 
-    // 1. Estructura del sistema de prestamos
-    const libros = [
-      { id: 1, titulo: "Cien Años de Soledad", autor: "Gabriel García Márquez", genero: "Novela", disponible: true },
-      { id: 2, titulo: "1984", autor: "George Orwell", genero: "Distopía", disponible: true },
-      { id: 3, titulo: "El Principito", autor: "Antoine de Saint-Exupéry", genero: "Ficción", disponible: true },
-      { id: 4, titulo: "El señor de los anillos", autor: "J. R. R. Tolkien", genero: "Ficción", disponible: true },
-      { id: 5, titulo: "Un mundo feliz", autor: "Aldoux Huxley", genero: "Drama", disponible: true },
-      { id: 6, titulo: "Orgullo y prejuicio", autor: "Jane Austen", genero: "Romantica", disponible: true },
-      { id: 7, titulo: "Crimen y castigo", autor: "Fiodor Dostojevski", genero: "Terror Psicologico", disponible: true },
-      { id: 8, titulo: "Lolita", autor: "Vladimir Nabokov", genero: "Novela", disponible: true },
-      { id: 9, titulo: "Ulises", autor: "James Joyce", genero: "Novela", disponible: true },
-      { id: 10, titulo: "Madame Bovary", autor: "Gustave Flaubert", genero: "Novela", disponible: true },
-      { id: 11, titulo: "Las mil y una noches", autor: "Anonimo", genero: "Novela", disponible: true },
-      { id: 12, titulo: "Don Quijote de la Mancha", autor: "Miguel de Cervantes", genero: "Novela", disponible: true },
-      { id: 13, titulo: "Almas muertas", autor: "Nikolai Gogol", genero: "Drama", disponible: true },
-      { id: 14, titulo: "Odisea", autor: "Homero", genero: "Clasico", disponible: true },
-      { id: 15, titulo: "Edipo Rey", autor: "Sophocles", genero: "Tragedia", disponible: true },
+      prestar() {
+        if (this.disponible) {
+          this.disponible = false;
+          return `El libro "${this.titulo}" no esta disponible`;
+        }
+        return `El libro "${this.titulo}" ha sido prestado`;
+      }
 
+      devolver() {
+        if (!this.disponible) {
+          this.disponible = true;
+          return `El libro "${this.titulo}" no estaba prestado. `;
+        }
+        return `El libro "${this.titulo}" ha sido devuelto.`;
+      }
+    }
+
+    // Clase Biblioteca
+    class Biblioteca {
+      constructor() {
+        this.libros = [];
+        this.librosPrestados = [];
+      }
+
+      agregarLibro(libro) {
+        this.libros.push(libro);
+      }
+
+      prestarLibro(id) {
+        const libro = this.libros.find((l) => l.id === id && l.disponible);
+        if (libro) {
+          libro.disponible = false;
+          this.librosPrestados.push(libro);
+          return libro.prestar();
+        }
+        return `El libro con ID ${id} no está disponible.`;
+      }
+
+      devolverLibro(id) {
+        const index = this.librosPrestados.findIndex((l) => l.id === id);
+        if (index !== -1) {
+          const libro = this.librosPrestados.splice(index, 1)[0];
+          libro.disponible = true;
+          return libro.devolver();
+        }
+        return `El libro con ID ${id} no estaba prestado.`;
+      }
+    }
+
+    // Crear instancia de Biblioteca
+    const biblioteca = new Biblioteca();
+
+    // Crear libros
+    const listaDeLibros = [
+      { id: 1, titulo: "Cien Años de Soledad", autor: "Gabriel García Márquez", genero: "Novela" },
+      { id: 2, titulo: "1984", autor: "George Orwell", genero: "Distopía" },
+      { id: 3, titulo: "El Principito", autor: "Antoine de Saint-Exupéry", genero: "Ficción" },
+      { id: 4, titulo: "El señor de los anillos", autor: "J. R. R. Tolkien", genero: "Ficción" },
+      { id: 5, titulo: "Un mundo feliz", autor: "Aldoux Huxley", genero: "Drama" },
+      { id: 6, titulo: "Orgullo y prejuicio", autor: "Jane Austen", genero: "Romántica" },
+      { id: 7, titulo: "Crimen y castigo", autor: "Fiodor Dostojevski", genero: "Terror Psicológico" },
+      { id: 8, titulo: "Lolita", autor: "Vladimir Nabokov", genero: "Novela" },
+      { id: 9, titulo: "Ulises", autor: "James Joyce", genero: "Novela" },
+      { id: 10, titulo: "Madame Bovary", autor: "Gustave Flaubert", genero: "Novela" },
+      { id: 11, titulo: "Las mil y una noches", autor: "Anónimo", genero: "Novela" },
+      { id: 12, titulo: "Don Quijote de la Mancha", autor: "Miguel de Cervantes", genero: "Novela" },
+      { id: 13, titulo: "Almas muertas", autor: "Nikolai Gogol", genero: "Drama" },
+      { id: 14, titulo: "Odisea", autor: "Homero", genero: "Clásico" },
+      { id: 15, titulo: "Edipo Rey", autor: "Sófocles", genero: "Tragedia" }
     ];
 
-    const librosPrestados = [];
+    listaDeLibros.forEach(({ id, titulo, autor, genero }) => {
+      const libro = new Libro(id, titulo, autor, genero);
+      biblioteca.agregarLibro(libro);
+    });
 
-    function prestarLibro(idLibro) {
-      const libro = libros.find((libro) => libro.id === idLibro && libro.disponible);
-      if (libro) {
-        libro.disponible = false;
-        librosPrestados.push(libro);
-        alert(`El libro "${libro.titulo}" ha sido prestado.`);
-      } else {
-        alert("El libro no está disponible.");
-      }
-    }
-
-    function devolverLibro(idLibro) {
-      const index = librosPrestados.findIndex((libro) => libro.id === idLibro);
-      if (index !== -1) {
-        const libro = librosPrestados.splice(index, 1)[0];
-        libro.disponible = true;
-        alert(`El libro "${libro.titulo}" ha sido devuelto.`);
-      } else {
-        alert("El libro no estaba prestado.");
-      }
-    }
-
-    // 2. Filtrado y búsquedas dinámicas
-    function buscarLibros(campo, valor) {
-      return libros.filter((libro) => libro[campo].toLowerCase().includes(valor.toLowerCase()));
-    }
-
-    // 3. Interacción con el usuario
+    // Interacción con el DOM
     const listaLibros = document.getElementById("libros");
     const listaPrestados = document.getElementById("prestados");
 
     function actualizarDOM() {
       listaLibros.innerHTML = "";
-      libros.forEach((libro) => {
+      biblioteca.libros.forEach((libro) => {
         const li = document.createElement("li");
         li.textContent = `${libro.id}. ${libro.titulo} - ${libro.disponible ? "Disponible" : "Prestado"}`;
         listaLibros.appendChild(li);
       });
 
       listaPrestados.innerHTML = "";
-      librosPrestados.forEach((libro) => {
+      biblioteca.librosPrestados.forEach((libro) => {
         const li = document.createElement("li");
         li.textContent = libro.titulo;
         listaPrestados.appendChild(li);
       });
     }
 
-    // 4. Alertas y recordatorios
-    function enviarRecordatorio() {
-      setInterval(() => {
-        librosPrestados.forEach((libro) => {
-          console.log(`Recordatorio: Devuelve el libro "${libro.titulo}" a tiempo.`);
-        });
-      }, 60000); // Cada minuto
-    }
-
-    enviarRecordatorio();
-
-    // 5. Eventos y usabilidad
-
-    //Evento onclick
     const botonPrestar = document.getElementById("prestar");
     const botonDevolver = document.getElementById("devolver");
 
     botonPrestar.onclick = () => {
       const id = parseInt(prompt("Introduce el ID del libro a prestar:"));
-      prestarLibro(id);
+      alert(biblioteca.prestarLibro(id));
       actualizarDOM();
     };
 
     botonDevolver.onclick = () => {
       const id = parseInt(prompt("Introduce el ID del libro a devolver:"));
-      devolverLibro(id);
+      alert(biblioteca.devolverLibro(id));
       actualizarDOM();
     };
-
-    //Evento OnChange
-    botonPrestar.onchange = () => {
-      const id = parseInt(prompt("Introduce el ID del libro a prestar:"));
-      prestarLibro(id);
-      actualizarDOM();
-    };
-
-    botonDevolver.onchange = () => {
-      const id = parseInt(prompt("Introduce el ID del libro a devolver:"));
-      devolverLibro(id);
-      actualizarDOM();
-    };
-
-    // 6. Funciones avanzadas
-    (async function notificarDisponibilidad() {
-      await new Promise((resolve) => setTimeout(resolve, 5000));
-      console.log("Notificación: Un libro reservado ahora está disponible.");
-    })();
-
-    // 7. Sistema de notificaciones
-    function notificarUsuario(mensaje) {
-      alert(mensaje);
-    }
-
-    // Simulando notificaciones
-    setTimeout(() => notificarUsuario("El libro reservado está disponible para su retiro."), 3000);
 
     actualizarDOM();
   </script>
