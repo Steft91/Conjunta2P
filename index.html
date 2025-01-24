@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sistema de Biblioteca</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    h1 {
+      color: #2c3e50;
+    }
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
+    li {
+      margin: 5px 0;
+    }
+    button {
+      margin: 5px;
+      padding: 10px;
+      background-color: #3498db;
+      color: white;
+      border: none;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+    button:hover {
+      background-color: #2980b9;
+    }
+  </style>
+</head>
+<body>
+  <h1>Sistema de Biblioteca</h1>
+  <h2>Libros Disponibles</h2>
+  <ul id="libros"></ul>
+  <h2>Libros Prestados</h2>
+  <ul id="prestados"></ul>
+  <button id="prestar">Prestar Libro</button>
+  <button id="devolver">Devolver Libro</button>
+
+  <script>
+    // Simulación del sistema de gestión de biblioteca
+
+    // 1. Estructura del sistema de préstamos
+    const libros = [
+      { id: 1, titulo: "Cien Años de Soledad", autor: "Gabriel García Márquez", genero: "Novela", disponible: true },
+      { id: 2, titulo: "1984", autor: "George Orwell", genero: "Distopía", disponible: true },
+      { id: 3, titulo: "El Principito", autor: "Antoine de Saint-Exupéry", genero: "Ficción", disponible: true },
+    ];
+
+    const librosPrestados = [];
+
+    // Función para prestar un libro
+    function prestarLibro(idLibro) {
+      const libro = libros.find((libro) => libro.id === idLibro && libro.disponible);
+      if (libro) {
+        libro.disponible = false;
+        librosPrestados.push(libro);
+        alert(`El libro "${libro.titulo}" ha sido prestado.`);
+      } else {
+        alert("El libro no está disponible.");
+      }
+    }
+
+    // Función para devolver un libro
+    function devolverLibro(idLibro) {
+      const index = librosPrestados.findIndex((libro) => libro.id === idLibro);
+      if (index !== -1) {
+        const libro = librosPrestados.splice(index, 1)[0];
+        libro.disponible = true;
+        alert(`El libro "${libro.titulo}" ha sido devuelto.`);
+      } else {
+        alert("El libro no estaba prestado.");
+      }
+    }
+
+    // 2. Filtrado y búsquedas dinámicas
+    function buscarLibros(campo, valor) {
+      return libros.filter((libro) => libro[campo].toLowerCase().includes(valor.toLowerCase()));
+    }
+
+    // 3. Interacción con el usuario
+    const listaLibros = document.getElementById("libros");
+    const listaPrestados = document.getElementById("prestados");
+
+    function actualizarDOM() {
+      listaLibros.innerHTML = "";
+      libros.forEach((libro) => {
+        const li = document.createElement("li");
+        li.textContent = `${libro.titulo} - ${libro.disponible ? "Disponible" : "Prestado"}`;
+        listaLibros.appendChild(li);
+      });
+
+      listaPrestados.innerHTML = "";
+      librosPrestados.forEach((libro) => {
+        const li = document.createElement("li");
+        li.textContent = libro.titulo;
+        listaPrestados.appendChild(li);
+      });
+    }
+
+    // 4. Alertas y recordatorios
+    function enviarRecordatorio() {
+      setInterval(() => {
+        librosPrestados.forEach((libro) => {
+          console.log(`Recordatorio: Devuelve el libro "${libro.titulo}" a tiempo.`);
+        });
+      }, 60000); // Cada minuto
+    }
+
+    enviarRecordatorio();
+
+    // 5. Eventos y usabilidad
+    const botonPrestar = document.getElementById("prestar");
+    const botonDevolver = document.getElementById("devolver");
+
+    botonPrestar.onclick = () => {
+      const id = parseInt(prompt("Introduce el ID del libro a prestar:"));
+      prestarLibro(id);
+      actualizarDOM();
+    };
+
+    botonDevolver.onclick = () => {
+      const id = parseInt(prompt("Introduce el ID del libro a devolver:"));
+      devolverLibro(id);
+      actualizarDOM();
+    };
+
+    // 6. Funciones avanzadas
+    (async function notificarDisponibilidad() {
+      await new Promise((resolve) => setTimeout(resolve, 5000));
+      console.log("Notificación: Un libro reservado ahora está disponible.");
+    })();
+
+    // 7. Sistema de notificaciones
+    function notificarUsuario(mensaje) {
+      alert(mensaje);
+    }
+
+    // Simulando notificaciones
+    setTimeout(() => notificarUsuario("El libro reservado está disponible para su retiro."), 3000);
+
+    actualizarDOM();
+  </script>
+</body>
+</html>
